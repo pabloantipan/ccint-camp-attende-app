@@ -1,0 +1,131 @@
+<div class="home-container">
+  <!-- Welcome Hero Section -->
+  <mat-card class="welcome-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="welcome-title">
+          <mat-icon class="welcome-icon">emoji_people</mat-icon>
+          <span>¡Hola, {{ userName() }}!</span>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="camp-countdown">
+        <div class="countdown-number">{{ daysUntilCamp() }}</div>
+        <div class="countdown-label">días para el campamento</div>
+        <div class="camp-date">{{ campStartDate() }}</div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Registration Status Card -->
+  <mat-card class="status-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="status-header">
+          <mat-icon [class]="'status-icon ' + getStatusColor()">{{ getStatusIcon() }}</mat-icon>
+          <span>Estado de Registro</span>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p class="status-message">{{ getStatusMessage() }}</p>
+      @if (registrationStatus() === 'incomplete' || registrationStatus() === 'pending') {
+        <button mat-raised-button color="primary" class="action-button" (click)="navigateTo('/registry')">
+          <mat-icon>arrow_forward</mat-icon>
+          Completar Registro
+        </button>
+      }
+      @if (registrationStatus() === 'complete') {
+        <button mat-raised-button color="accent" class="action-button" (click)="navigateTo('/checkin')">
+          <mat-icon>check_circle</mat-icon>
+          Realizar Check-in
+        </button>
+      }
+      @if (registrationStatus() === 'checked-in') {
+        <mat-chip-set class="status-chips">
+          <mat-chip highlighted>
+            <mat-icon matChipAvatar>verified</mat-icon>
+            Check-in Completo
+          </mat-chip>
+        </mat-chip-set>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Important Announcements -->
+  @if (announcements().length > 0) {
+    <mat-card class="announcements-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>
+          <div class="section-title">
+            <mat-icon>campaign</mat-icon>
+            <span>Avisos Importantes</span>
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="announcements-list">
+          @for (announcement of announcements(); track announcement) {
+            <div class="announcement-item">
+              <mat-icon class="announcement-icon">info</mat-icon>
+              <span>{{ announcement }}</span>
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+  <!-- Upcoming Events -->
+  <mat-card class="events-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>
+        <div class="section-title">
+          <mat-icon>event</mat-icon>
+          <span>Próximas Actividades</span>
+        </div>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="events-list">
+        @for (event of upcomingEvents(); track event.id) {
+          <div class="event-item">
+            <div class="event-icon-wrapper">
+              <mat-icon class="event-icon">{{ event.icon }}</mat-icon>
+            </div>
+            <div class="event-details">
+              <div class="event-title">{{ event.title }}</div>
+              <div class="event-time">
+                <mat-icon class="small-icon">schedule</mat-icon>
+                {{ event.date }} - {{ event.time }}
+              </div>
+              <div class="event-location">
+                <mat-icon class="small-icon">place</mat-icon>
+                {{ event.location }}
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Quick Actions Grid -->
+  <div class="quick-actions-section">
+    <h2 class="section-header">Acciones Rápidas</h2>
+    <div class="quick-actions-grid">
+      @for (action of quickActions(); track action.title) {
+        <mat-card class="quick-action-card" (click)="navigateTo(action.route)" appearance="outlined">
+          <mat-card-content>
+            <div class="quick-action-content">
+              <mat-icon [class]="'quick-action-icon ' + action.color">{{ action.icon }}</mat-icon>
+              <div class="quick-action-title">{{ action.title }}</div>
+              <div class="quick-action-description">{{ action.description }}</div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  </div>
+</div>

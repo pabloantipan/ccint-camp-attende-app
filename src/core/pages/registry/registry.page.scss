@@ -1,0 +1,292 @@
+// Mobile-first registry page for attendeees
+:host {
+  display: block;
+}
+
+.registry-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+  padding: 16px;
+  padding-bottom: 80px; // Extra space for mobile navigation
+
+  // Page Header
+  .registry-header {
+    text-align: center;
+    padding: 24px 0;
+    margin-bottom: 24px;
+
+    .header-icon {
+      font-size: 3.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      color: #667eea;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .header-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.5;
+      padding: 0 16px;
+    }
+  }
+
+  // Main Content Card
+  .registry-card {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    mat-card-content {
+      padding: 20px 16px;
+    }
+  }
+}
+
+// Global form field styles for mobile-first
+::ng-deep {
+
+  // Material form fields
+  .mat-mdc-form-field {
+    width: 100%;
+    margin-bottom: 8px;
+
+    .mat-mdc-text-field-wrapper {
+      border-radius: 8px;
+    }
+
+    .mat-mdc-form-field-error {
+      font-size: 0.875rem;
+      margin-top: 4px;
+    }
+  }
+
+  // Input fields
+  input,
+  select,
+  textarea {
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    width: 100%;
+    transition: all 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    &:disabled {
+      background-color: #f3f4f6;
+      color: #9ca3af;
+      cursor: not-allowed;
+    }
+
+    // Mobile optimization: larger touch targets
+    @media (max-width: 768px) {
+      min-height: 48px;
+      font-size: 16px; // Prevents iOS zoom on focus
+    }
+  }
+
+  // Textareas specific styles
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  // Buttons
+  button[mat-raised-button],
+  button[mat-flat-button] {
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    padding: 0 24px;
+
+    &:not(:disabled):hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    &:not(:disabled):active {
+      transform: translateY(0);
+    }
+
+    // Full width on mobile
+    @media (max-width: 640px) {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+
+  // Material stepper customization
+  .mat-stepper-horizontal {
+    background: transparent;
+  }
+
+  .mat-stepper-horizontal-line {
+    border-top-width: 2px;
+    margin: 0 8px;
+  }
+
+  .mat-step-header {
+    padding: 16px 8px;
+    height: auto;
+    min-height: 72px;
+    overflow: visible;
+
+    &.cdk-keyboard-focused,
+    &.cdk-program-focused,
+    &:hover:not([aria-disabled]),
+    &:hover[aria-disabled='false'] {
+      background-color: rgba(102, 126, 234, 0.05);
+    }
+
+    .mat-step-icon {
+      width: 32px;
+      height: 32px;
+      margin-right: 8px;
+    }
+
+    .mat-step-label {
+      font-size: 0.875rem;
+      min-width: 0;
+    }
+  }
+
+  .mat-horizontal-content-container {
+    padding: 24px 0 16px;
+  }
+
+  // Mobile stepper adjustments
+  @media (max-width: 768px) {
+    .mat-stepper-horizontal {
+      .mat-step-header {
+        padding: 12px 4px;
+
+        .mat-step-icon {
+          width: 28px;
+          height: 28px;
+          margin-right: 4px;
+        }
+
+        .mat-step-label {
+          font-size: 0.75rem;
+        }
+      }
+
+      .mat-stepper-horizontal-line {
+        margin: 0 4px;
+      }
+    }
+  }
+
+  // Checkboxes and radio buttons
+  .mat-mdc-checkbox,
+  .mat-mdc-radio-button {
+    margin-bottom: 12px;
+
+    .mdc-label {
+      font-size: 0.9375rem;
+      line-height: 1.5;
+    }
+  }
+
+  // Cards within forms
+  .mat-mdc-card {
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+}
+
+// Helper classes
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-red-600 {
+  color: #dc2626;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 4px;
+  display: block;
+}
+
+.required-indicator {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+// Tablet breakpoint (768px and up)
+@media (min-width: 768px) {
+  .registry-container {
+    padding: 24px;
+    padding-bottom: 40px;
+
+    .registry-header {
+      padding: 32px 0;
+      margin-bottom: 32px;
+
+      .header-icon {
+        font-size: 4rem;
+        width: 4rem;
+        height: 4rem;
+      }
+
+      .header-title {
+        font-size: 2rem;
+      }
+    }
+
+    .registry-card {
+      mat-card-content {
+        padding: 32px 24px;
+      }
+    }
+  }
+}
+
+// Desktop breakpoint (1024px and up)
+@media (min-width: 1024px) {
+  .registry-container {
+    padding: 40px;
+    padding-bottom: 40px;
+
+    .registry-header {
+      padding: 40px 0;
+
+      .header-title {
+        font-size: 2.25rem;
+      }
+
+      .header-subtitle {
+        font-size: 1.125rem;
+      }
+    }
+
+    .registry-card {
+      mat-card-content {
+        padding: 40px 32px;
+      }
+    }
+  }
+}

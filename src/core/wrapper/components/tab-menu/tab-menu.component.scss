@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+nav {
+  // Prevent content from being hidden behind bottom nav
+  // Safe area for iOS devices with notch
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+button {
+  // Remove default Material button styles for cleaner look
+  &.mat-mdc-button {
+    min-width: 0;
+    padding: 0;
+
+    // Remove ripple background
+    .mat-mdc-button-persistent-ripple {
+      display: none;
+    }
+
+    // Smooth transition for color changes
+    transition: color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+
+  // Active state animation
+  &.text-primary {
+    mat-icon {
+      animation: bounce 0.3s ease-in-out;
+    }
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+// Ensure icons are properly sized
+mat-icon {
+  user-select: none;
+}
+
+// Badge styling for better visibility
+.absolute {
+  pointer-events: none;
+}

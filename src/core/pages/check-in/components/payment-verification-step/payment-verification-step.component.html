@@ -1,0 +1,51 @@
+<div class="payment-verification-step p-4">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="step-icon">payment</mat-icon>
+      <mat-card-title>Verificación de Pago</mat-card-title>
+      <mat-card-subtitle>Suba el comprobante de transferencia o pago</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-4">
+      <div class="info-section mb-6 p-4 bg-blue-50 rounded-lg">
+        <h3 class="font-medium mb-2 flex items-center gap-2">
+          <mat-icon class="text-blue-600">info</mat-icon>
+          Información Importante
+        </h3>
+        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+          <li>Suba una foto clara del comprobante de pago</li>
+          <li>Asegúrese de que los datos sean legibles</li>
+          <li>El monto debe coincidir con el valor del camp</li>
+          <li>Formatos aceptados: JPG, PNG, PDF</li>
+        </ul>
+      </div>
+
+      <app-image-upload-widget [title]="'Comprobante de Pago'"
+        [description]="'Tome una foto o suba el comprobante de transferencia'" [icon]="'receipt'"
+        [helperText]="'El comprobante será revisado por el personal administrativo'"
+        [imagePreview]="transferTicketImage()">
+      </app-image-upload-widget>
+
+      <div class="payment-status mt-4 p-4 border rounded-lg" [class.bg-green-50]="isVerified()"
+        [class.border-green-300]="isVerified()">
+        <div class="flex items-center gap-2">
+          @if (isVerified()) {
+          <mat-icon class="text-green-600">check_circle</mat-icon>
+          <span class="font-medium text-green-700">Pago Verificado</span>
+          } @else {
+          <mat-icon class="text-orange-600">pending</mat-icon>
+          <span class="font-medium text-orange-700">Pendiente de Verificación</span>
+          }
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="flex justify-end gap-2 p-4">
+      <button mat-button>Cancelar</button>
+      <button mat-raised-button color="primary" (click)="onComplete()">
+        Continuar
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

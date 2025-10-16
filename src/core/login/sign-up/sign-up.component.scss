@@ -1,0 +1,13 @@
+:host {
+  display: block;
+}
+
+// Override Angular Material card padding
+mat-card-content {
+  padding: 0 !important;
+}
+
+// Ensure form fields take full width
+mat-form-field {
+  display: block;
+}

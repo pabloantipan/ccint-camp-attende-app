@@ -1,0 +1,47 @@
+<mat-card class="upload-widget">
+  <mat-card-content>
+    <div class="upload-area border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+      @if (!imagePreview()) {
+        <div class="empty-state">
+          <mat-icon class="text-6xl text-gray-400 mb-4">{{icon()}}</mat-icon>
+          <h3 class="text-lg font-medium mb-2">{{title()}}</h3>
+          <p class="text-gray-600 mb-4">{{description()}}</p>
+
+          <div class="button-group flex gap-2 justify-center">
+            <button mat-raised-button color="primary" class="flex items-center gap-2">
+              <mat-icon>camera_alt</mat-icon>
+              Tomar Foto
+            </button>
+            <button mat-raised-button class="flex items-center gap-2">
+              <mat-icon>upload_file</mat-icon>
+              Subir Archivo
+            </button>
+          </div>
+        </div>
+      } @else {
+        <div class="preview-state">
+          <div class="preview-image bg-gray-100 rounded-lg mb-4 p-4">
+            <img [src]="imagePreview()" alt="Preview" class="max-w-full max-h-64 mx-auto rounded" />
+          </div>
+          <div class="button-group flex gap-2 justify-center">
+            <button mat-raised-button color="warn" (click)="onRemove()">
+              <mat-icon>delete</mat-icon>
+              Eliminar
+            </button>
+            <button mat-raised-button color="primary">
+              <mat-icon>camera_alt</mat-icon>
+              Tomar Otra
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (helperText()) {
+      <p class="helper-text text-sm text-gray-500 mt-2">
+        <mat-icon class="text-sm align-middle">info</mat-icon>
+        {{helperText()}}
+      </p>
+    }
+  </mat-card-content>
+</mat-card>

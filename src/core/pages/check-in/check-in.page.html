@@ -1,0 +1,96 @@
+<div class="check-in-container">
+  <!-- Page Header -->
+  <div class="check-in-header">
+    <mat-icon class="header-icon">check_circle</mat-icon>
+    <h1 class="header-title">Check-in del Campamento</h1>
+    <p class="header-subtitle">Complete los siguientes pasos para registrar su llegada</p>
+  </div>
+
+  <!-- Progress Indicator (Mobile-friendly) -->
+  <div class="progress-card">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="progress-info">
+          <span class="progress-label">Progreso del Check-in</span>
+          <span class="progress-value">{{ getCurrentStep() }}/5</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Stepper Card -->
+  <mat-card class="stepper-card" appearance="outlined">
+    <mat-card-content>
+      <mat-stepper [linear]="true" #stepper class="check-in-stepper" orientation="vertical">
+        <!-- Step 1: Payment Verification -->
+        <!-- <mat-step [completed]="paymentCompleted()"> -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Verificación de Pago</span>
+          </ng-template>
+          <div class="step-content">
+            <app-payment-verification-step (completed)="onPaymentCompleted()">
+            </app-payment-verification-step>
+          </div>
+        </mat-step>
+
+        <!-- Step 2: Parent Authorization -->
+        <!-- <mat-step [completed]="authorizationCompleted()"> -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Autorización de Apoderados</span>
+          </ng-template>
+          <div class="step-content">
+            <app-parent-authorization-step (completed)="onAuthorizationCompleted()">
+            </app-parent-authorization-step>
+          </div>
+        </mat-step>
+
+        <!-- Step 3: Arrival Confirmation -->
+        <!-- <mat-step [completed]="arrivalCompleted()"> -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Confirmación de Llegada</span>
+          </ng-template>
+          <div class="step-content">
+            <app-arrival-confirmation-step (completed)="onArrivalCompleted()">
+            </app-arrival-confirmation-step>
+          </div>
+        </mat-step>
+
+        <!-- Step 4: Materials Delivery -->
+        <!-- <mat-step [completed]="materialsCompleted()"> -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Entrega de Materiales</span>
+          </ng-template>
+          <div class="step-content">
+            <app-materials-delivery-step (completed)="onMaterialsCompleted()">
+            </app-materials-delivery-step>
+          </div>
+        </mat-step>
+
+        <!-- Completion Step -->
+        <mat-step>
+          <ng-template matStepLabel>
+            <span class="step-label">Completado</span>
+          </ng-template>
+          <div class="step-content completion-content">
+            <div class="completion-icon-wrapper">
+              <mat-icon class="completion-icon">verified</mat-icon>
+            </div>
+            <h2 class="completion-title">¡Check-in Completado!</h2>
+            <p class="completion-message">
+              Todos los pasos del check-in han sido completados exitosamente.
+              ¡Bienvenido al campamento!
+            </p>
+            <button mat-raised-button color="primary" class="completion-button" (click)="goToHome()">
+              <mat-icon>home</mat-icon>
+              Volver al Inicio
+            </button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </mat-card-content>
+  </mat-card>
+</div>

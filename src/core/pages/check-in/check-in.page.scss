@@ -1,0 +1,387 @@
+// Mobile-first check-in page for attendeees
+:host {
+  display: block;
+}
+
+.check-in-container {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+  padding: 16px;
+  padding-bottom: 80px; // Extra space for mobile navigation
+
+  // Page Header
+  .check-in-header {
+    text-align: center;
+    padding: 24px 0;
+    margin-bottom: 20px;
+
+    .header-icon {
+      font-size: 3.5rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      color: #10b981;
+      margin: 0 auto 16px;
+      display: block;
+    }
+
+    .header-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 8px;
+      line-height: 1.2;
+    }
+
+    .header-subtitle {
+      font-size: 1rem;
+      color: #6b7280;
+      margin: 0;
+      line-height: 1.5;
+      padding: 0 16px;
+    }
+  }
+
+  // Progress Card
+  .progress-card {
+    margin-bottom: 20px;
+
+    mat-card {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+
+      mat-card-content {
+        padding: 16px;
+      }
+
+      .progress-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .progress-label {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        .progress-value {
+          font-size: 1.5rem;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  // Main Stepper Card
+  .stepper-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    mat-card-content {
+      padding: 20px 16px;
+    }
+  }
+
+  // Step Content Wrapper
+  .step-content {
+    padding: 16px 0;
+    min-height: 200px;
+  }
+
+  // Completion Content
+  .completion-content {
+    text-align: center;
+    padding: 32px 16px;
+
+    .completion-icon-wrapper {
+      margin-bottom: 24px;
+
+      .completion-icon {
+        font-size: 5rem;
+        width: 5rem;
+        height: 5rem;
+        color: #10b981;
+        animation: scaleIn 0.5s ease-out;
+      }
+    }
+
+    .completion-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin: 0 0 16px;
+    }
+
+    .completion-message {
+      font-size: 1rem;
+      color: #6b7280;
+      line-height: 1.6;
+      margin: 0 0 32px;
+      padding: 0 16px;
+    }
+
+    .completion-button {
+      min-width: 200px;
+      height: 48px;
+      font-size: 1rem;
+      font-weight: 600;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+// Animation for completion icon
+@keyframes scaleIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+// Material Stepper Customization
+::ng-deep {
+  .check-in-stepper {
+    background: transparent;
+
+    // Vertical stepper configuration
+    &.mat-stepper-vertical {
+      .mat-step-header {
+        pointer-events: auto !important;
+        padding: 16px;
+        min-height: 72px;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background-color: rgba(102, 126, 234, 0.05);
+        }
+
+        // Step icon
+        .mat-step-icon {
+          width: 40px;
+          height: 40px;
+          margin-right: 12px;
+          background-color: #e5e7eb;
+          color: #6b7280;
+
+          &.mat-step-icon-selected,
+          &.mat-step-icon-state-edit {
+            background-color: #667eea;
+            color: white;
+          }
+
+          &.mat-step-icon-state-done {
+            background-color: #10b981;
+            color: white;
+          }
+        }
+
+        // Step label
+        .mat-step-label {
+          font-size: 1rem;
+          font-weight: 500;
+          color: #1f2937;
+
+          &.mat-step-label-active {
+            color: #667eea;
+          }
+
+          .step-label {
+            display: block;
+            line-height: 1.4;
+          }
+        }
+      }
+
+      // Vertical line between steps
+      .mat-stepper-vertical-line {
+        &::before {
+          border-left-width: 2px;
+          border-left-color: #e5e7eb;
+          left: 36px;
+        }
+      }
+
+      // Step content
+      .mat-vertical-content {
+        padding: 0 16px 24px 68px;
+      }
+
+      .mat-vertical-content-container {
+        margin-left: 0;
+      }
+    }
+  }
+
+  // Stepper buttons
+  .mat-stepper-horizontal-line,
+  .mat-stepper-vertical-line {
+    border-color: #e5e7eb;
+  }
+
+  // Step actions (next/back buttons)
+  .mat-stepper-next,
+  .mat-stepper-previous {
+    min-height: 48px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0 24px;
+
+    // Mobile full width
+    @media (max-width: 640px) {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+// Tablet breakpoint (768px and up)
+@media (min-width: 768px) {
+  .check-in-container {
+    padding: 24px;
+    padding-bottom: 40px;
+
+    .check-in-header {
+      padding: 32px 0;
+      margin-bottom: 24px;
+
+      .header-icon {
+        font-size: 4rem;
+        width: 4rem;
+        height: 4rem;
+      }
+
+      .header-title {
+        font-size: 2rem;
+      }
+    }
+
+    .progress-card {
+      margin-bottom: 24px;
+
+      mat-card-content {
+        padding: 20px;
+      }
+
+      .progress-info {
+        .progress-label {
+          font-size: 1.125rem;
+        }
+
+        .progress-value {
+          font-size: 1.75rem;
+        }
+      }
+    }
+
+    .stepper-card {
+      mat-card-content {
+        padding: 32px 24px;
+      }
+    }
+
+    .step-content {
+      padding: 20px 0;
+    }
+
+    .completion-content {
+      padding: 48px 24px;
+
+      .completion-icon-wrapper {
+        .completion-icon {
+          font-size: 6rem;
+          width: 6rem;
+          height: 6rem;
+        }
+      }
+
+      .completion-title {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  ::ng-deep {
+    .check-in-stepper {
+      &.mat-stepper-vertical {
+        .mat-step-header {
+          padding: 20px;
+
+          .mat-step-icon {
+            width: 44px;
+            height: 44px;
+            margin-right: 16px;
+          }
+
+          .mat-step-label {
+            font-size: 1.125rem;
+          }
+        }
+
+        .mat-vertical-content {
+          padding: 0 20px 32px 80px;
+        }
+
+        .mat-stepper-vertical-line::before {
+          left: 40px;
+        }
+      }
+    }
+  }
+}
+
+// Desktop breakpoint (1024px and up)
+@media (min-width: 1024px) {
+  .check-in-container {
+    padding: 40px;
+    padding-bottom: 40px;
+
+    .check-in-header {
+      padding: 40px 0;
+
+      .header-title {
+        font-size: 2.25rem;
+      }
+
+      .header-subtitle {
+        font-size: 1.125rem;
+      }
+    }
+
+    .stepper-card {
+      mat-card-content {
+        padding: 40px 32px;
+      }
+    }
+
+    .completion-content {
+      padding: 64px 32px;
+
+      .completion-title {
+        font-size: 2.25rem;
+      }
+
+      .completion-message {
+        font-size: 1.125rem;
+      }
+    }
+  }
+}

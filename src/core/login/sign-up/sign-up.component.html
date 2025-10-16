@@ -1,0 +1,130 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-gray-900">Crear tu Cuenta</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        ¡Únete hoy! Por favor completa tus datos.
+      </p>
+    </div>
+
+    <mat-card class="!shadow-lg">
+      <mat-card-content class="p-6">
+        <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+          <!-- Display Name Field -->
+          <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>Nombre Completo</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="displayName"
+              placeholder="Ingresa tu nombre completo"
+              autocomplete="name"
+            />
+            <mat-icon matPrefix>person</mat-icon>
+            @if (signUpForm.get('displayName')?.invalid && signUpForm.get('displayName')?.touched) {
+              <mat-error>{{ getDisplayNameErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Email Field -->
+          <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>Correo Electrónico</mat-label>
+            <input
+              matInput
+              type="email"
+              formControlName="email"
+              placeholder="Ingresa tu correo electrónico"
+              autocomplete="email"
+            />
+            <mat-icon matPrefix>email</mat-icon>
+            @if (signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched) {
+              <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Password Field -->
+          <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              [type]="hidePassword() ? 'password' : 'text'"
+              formControlName="password"
+              placeholder="Crea una contraseña"
+              autocomplete="new-password"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="togglePasswordVisibility()"
+              [attr.aria-label]="'Alternar visibilidad de contraseña'"
+            >
+              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched) {
+              <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Confirm Password Field -->
+          <mat-form-field appearance="outline" class="w-full mb-4">
+            <mat-label>Confirmar Contraseña</mat-label>
+            <input
+              matInput
+              [type]="hideConfirmPassword() ? 'password' : 'text'"
+              formControlName="confirmPassword"
+              placeholder="Confirma tu contraseña"
+              autocomplete="new-password"
+            />
+            <mat-icon matPrefix>lock</mat-icon>
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              (click)="toggleConfirmPasswordVisibility()"
+              [attr.aria-label]="'Alternar visibilidad de confirmación de contraseña'"
+            >
+              <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            @if (signUpForm.get('confirmPassword')?.invalid && signUpForm.get('confirmPassword')?.touched) {
+              <mat-error>{{ getConfirmPasswordErrorMessage() }}</mat-error>
+            }
+          </mat-form-field>
+
+          <!-- Error Message -->
+          @if (errorMessage()) {
+            <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
+              <p class="text-sm">{{ errorMessage() }}</p>
+            </div>
+          }
+
+          <!-- Sign Up Button -->
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="w-full !py-3"
+            [disabled]="isLoading()"
+          >
+            @if (isLoading()) {
+              <span>Creando cuenta...</span>
+            } @else {
+              <span>Registrarse</span>
+            }
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Additional Links -->
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-600">
+        ¿Ya tienes una cuenta?
+        <a routerLink="/login/sign-in" class="font-medium text-primary hover:underline">
+          Inicia sesión
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

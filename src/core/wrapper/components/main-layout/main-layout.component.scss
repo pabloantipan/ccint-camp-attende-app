@@ -1,0 +1,10 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+main {
+  // Ensure content is scrollable
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+}

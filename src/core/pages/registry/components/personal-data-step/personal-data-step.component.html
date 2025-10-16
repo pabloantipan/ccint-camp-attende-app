@@ -1,0 +1,237 @@
+@if (loading()) {
+<div class="flex justify-center items-center p-8">
+  <p class="text-gray-600">Cargando...</p>
+</div>
+} @else {
+<form [formGroup]="personalDataForm" class="space-y-4 mt-4">
+  <!-- País (moved to top) -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        País <span class="text-red-500">*</span>
+      </label>
+      <div class="relative">
+        <input type="text" formControlName="country" [matAutocomplete]="autoCountry"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Buscar país" />
+        @if (personalDataForm.get('country')?.value) {
+        <button type="button" class="clear-button" (click)="clearCountry()" aria-label="Limpiar selección">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-autocomplete #autoCountry="matAutocomplete">
+          @for (country of filteredCountries$ | async; track country) {
+          <mat-option [value]="country">
+            <span class="country-option">
+              <span class="country-flag">{{ getCountryFlag(country) }}</span>
+              <span class="country-name">{{ country }}</span>
+            </span>
+          </mat-option>
+          }
+        </mat-autocomplete>
+      </div>
+      @if (personalDataForm.get('country')?.invalid && personalDataForm.get('country')?.touched) {
+      <span class="text-xs text-red-600 mt-1">El país es requerido</span>
+      }
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Nombre -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Nombre <span class="text-red-500">*</span>
+      </label>
+      <input type="text" formControlName="firstName"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Ingrese su nombre" />
+      @if (personalDataForm.get('firstName')?.invalid && personalDataForm.get('firstName')?.touched) {
+      <span class="text-xs text-red-600 mt-1">El nombre es requerido</span>
+      }
+    </div>
+
+    <!-- Apellido -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Apellido <span class="text-red-500">*</span>
+      </label>
+      <input type="text" formControlName="lastName"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="Ingrese su apellido" />
+      @if (personalDataForm.get('lastName')?.invalid && personalDataForm.get('lastName')?.touched) {
+      <span class="text-xs text-red-600 mt-1">El apellido es requerido</span>
+      }
+    </div>
+
+    <!-- Fecha de Nacimiento -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Fecha de Nacimiento <span class="text-red-500">*</span>
+        @if (displayDateOfBirth()) {
+        <span class="text-xs text-gray-500 ml-2">({{ displayDateOfBirth() }})</span>
+        }
+      </label>
+      <input type="date" [value]="getDateInputValue()" (change)="onDateOfBirthChange($event)"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary" />
+      @if (personalDataForm.get('dateOfBirth')?.invalid && personalDataForm.get('dateOfBirth')?.touched) {
+      @if (personalDataForm.get('dateOfBirth')?.hasError('required')) {
+      <span class="text-xs text-red-600 mt-1">La fecha de nacimiento es requerida</span>
+      }
+      @if (personalDataForm.get('dateOfBirth')?.hasError('minAge')) {
+      <span class="text-xs text-red-600 mt-1">Debe tener al menos 11 años</span>
+      }
+      }
+    </div>
+
+    <!-- Género -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Género <span class="text-red-500">*</span>
+      </label>
+      <select formControlName="gender"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="">Seleccione género</option>
+        <option value="Masculino">Masculino</option>
+        <option value="Femenino">Femenino</option>
+        @if (personalDataForm.get('gender')?.value) {
+        <!-- <option value="" class="clear-option">✕ Limpiar selección</option> -->
+        }
+      </select>
+      @if (personalDataForm.get('gender')?.invalid && personalDataForm.get('gender')?.touched) {
+      <span class="text-xs text-red-600 mt-1">El género es requerido</span>
+      }
+    </div>
+
+    <!-- Teléfono con código de país -->
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Teléfono <span class="text-red-500">*</span>
+      </label>
+      <div class="flex gap-2">
+        <select formControlName="countryCode"
+          class="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+          @for (cc of countryCodes(); track cc.code) {
+          <option [value]="cc.code">{{ cc.flag }} {{ cc.code }}</option>
+          }
+        </select>
+        <input type="tel" formControlName="phone"
+          class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="9 7664 5678" />
+      </div>
+      @if (personalDataForm.get('phone')?.invalid && personalDataForm.get('phone')?.touched) {
+      <span class="text-xs text-red-600 mt-1">El teléfono es requerido (solo números)</span>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Correo Electrónico <span class="text-red-500">*</span>
+      </label>
+      <input type="email" formControlName="email"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        placeholder="correo@ejemplo.com" />
+      @if (personalDataForm.get('email')?.invalid && personalDataForm.get('email')?.touched) {
+      <span class="text-xs text-red-600 mt-1">Correo electrónico válido es requerido</span>
+      }
+    </div>
+  </div>
+
+  <!-- Región (solo para Chile) -->
+  @if (isChile()) {
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Región <span class="text-red-500">*</span>
+      </label>
+      <select formControlName="region"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+        <option value="">Seleccione región</option>
+        @for (region of chileanRegions(); track region) {
+        <option [value]="region">{{ region }}</option>
+        }
+        @if (personalDataForm.get('region')?.value) {
+        <!-- <option value="" class="clear-option">✕ Limpiar selección</option> -->
+        }
+      </select>
+      @if (personalDataForm.get('region')?.invalid && personalDataForm.get('region')?.touched) {
+      <span class="text-xs text-red-600 mt-1">La región es requerida</span>
+      }
+    </div>
+  </div>
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Ciudad -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Ciudad <span class="text-red-500">*</span>
+      </label>
+      <div class="relative">
+        <input type="text" formControlName="city" [matAutocomplete]="autoCity"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+          placeholder="Buscar ciudad" />
+        @if (personalDataForm.get('city')?.value) {
+        <button type="button" class="clear-button" (click)="clearCity()" aria-label="Limpiar selección">
+          <mat-icon>close</mat-icon>
+        </button>
+        }
+        <mat-autocomplete #autoCity="matAutocomplete">
+          @for (city of filteredCities$ | async; track city) {
+          <mat-option [value]="city">{{ city }}</mat-option>
+          }
+        </mat-autocomplete>
+      </div>
+      @if (personalDataForm.get('city')?.invalid && personalDataForm.get('city')?.touched) {
+      <span class="text-xs text-red-600 mt-1">La ciudad es requerida</span>
+      }
+    </div>
+
+    <!-- Comuna (solo para Chile) -->
+    @if (isChile()) {
+    <div class="md:col-span-2">
+      <label class="block text-sm font-medium text-gray-700 mb-1">
+        Comuna <span class="text-red-500">*</span>
+      </label>
+      <select formControlName="state"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+        [disabled]="!personalDataForm.get('region')?.value">
+        <option value="">{{ personalDataForm.get('region')?.value ? 'Seleccione comuna' : 'Primero seleccione una
+          región' }}</option>
+        @for (commune of filteredCommunes(); track commune) {
+        <option [value]="commune">{{ commune }}</option>
+        }
+        @if (personalDataForm.get('state')?.value) {
+        <option value="" class="clear-option">✕ Limpiar selección</option>
+        }
+      </select>
+      @if (personalDataForm.get('state')?.invalid && personalDataForm.get('state')?.touched) {
+      <span class="text-xs text-red-600 mt-1">La comuna es requerida</span>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Dirección -->
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">
+      Dirección <span class="text-red-500">*</span>
+    </label>
+    <input type="text" formControlName="address"
+      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Calle y número" />
+    @if (personalDataForm.get('address')?.invalid && personalDataForm.get('address')?.touched) {
+    <span class="text-xs text-red-600 mt-1">La dirección es requerida</span>
+    }
+  </div>
+
+  <!-- Navegación -->
+  <div class="flex justify-end mt-6">
+    <button mat-raised-button color="primary" (click)="onNext()" type="button" [disabled]="personalDataForm.invalid"
+      class="!px-6">
+      Siguiente
+      <mat-icon class="ml-2">arrow_forward</mat-icon>
+    </button>
+  </div>
+</form>
+}

@@ -1,0 +1,16 @@
+.upload-area {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upload-widget {
+  margin: 1rem 0;
+}
+
+.helper-text {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

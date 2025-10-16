@@ -1,0 +1,76 @@
+<div class="arrival-confirmation-step p-4">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="step-icon">location_on</mat-icon>
+      <mat-card-title>Confirmación de Llegada</mat-card-title>
+      <mat-card-subtitle>Registre la llegada del participante al camp</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-4">
+      <div class="info-section mb-6 p-4 bg-green-50 rounded-lg">
+        <h3 class="font-medium mb-2 flex items-center gap-2">
+          <mat-icon class="text-green-600">info</mat-icon>
+          Información de Llegada
+        </h3>
+        <p class="text-sm text-gray-700 mb-2">
+          Este paso debe completarse presencialmente en el punto de registro del camp.
+        </p>
+        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+          <li>Verifique la identidad del participante</li>
+          <li>Confirme que trae todos los documentos requeridos</li>
+          <li>Registre la hora exacta de llegada</li>
+        </ul>
+      </div>
+
+      <div class="arrival-details space-y-4">
+        <div class="detail-card p-4 border rounded-lg">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-medium">Hora de Llegada</span>
+            <span class="text-lg font-bold text-blue-600">{{currentTime()}}</span>
+          </div>
+          <p class="text-sm text-gray-600">Se registrará automáticamente al confirmar</p>
+        </div>
+
+        <div class="checklist space-y-3 p-4 bg-gray-50 rounded-lg">
+          <h4 class="font-medium mb-3">Lista de Verificación</h4>
+
+          <mat-checkbox [checked]="identityVerified()" (change)="identityVerified.set($event.checked)" class="full-width">
+            Identidad del participante verificada
+          </mat-checkbox>
+
+          <mat-checkbox [checked]="documentsComplete()" (change)="documentsComplete.set($event.checked)" class="full-width">
+            Documentos completos y en orden
+          </mat-checkbox>
+
+          <mat-checkbox [checked]="emergencyContactConfirmed()" (change)="emergencyContactConfirmed.set($event.checked)" class="full-width">
+            Contacto de emergencia confirmado
+          </mat-checkbox>
+
+          <mat-checkbox [checked]="healthInfoReviewed()" (change)="healthInfoReviewed.set($event.checked)" class="full-width">
+            Información médica revisada
+          </mat-checkbox>
+        </div>
+
+        <div class="arrival-status mt-4 p-4 border rounded-lg" [class.bg-green-50]="allChecked()" [class.border-green-300]="allChecked()">
+          <div class="flex items-center gap-2">
+            @if (allChecked()) {
+              <mat-icon class="text-green-600">check_circle</mat-icon>
+              <span class="font-medium text-green-700">Listo para Confirmar Llegada</span>
+            } @else {
+              <mat-icon class="text-orange-600">pending_actions</mat-icon>
+              <span class="font-medium text-orange-700">Complete todas las verificaciones</span>
+            }
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="flex justify-end gap-2 p-4">
+      <button mat-button>Atrás</button>
+      <button mat-raised-button color="primary" [disabled]="!allChecked()" (click)="onComplete()">
+        Confirmar Llegada
+        <mat-icon>check</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

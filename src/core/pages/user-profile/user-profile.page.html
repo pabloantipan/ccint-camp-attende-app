@@ -1,0 +1,173 @@
+<div class="p-4 space-y-4">
+  @if (user(); as currentUser) {
+    <!-- Profile Header Card -->
+    <mat-card class="!shadow-lg">
+      <mat-card-content class="p-6">
+        <div class="flex flex-col items-center text-center">
+          <!-- Avatar with initials -->
+          <div class="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-bold mb-4">
+            {{ getInitials(currentUser.displayName) }}
+          </div>
+
+          <!-- User Name -->
+          <h2 class="text-2xl font-bold text-gray-900">
+            {{ currentUser.displayName || 'User' }}
+          </h2>
+
+          <!-- Email -->
+          <p class="text-gray-600 mt-1">
+            {{ currentUser.email }}
+          </p>
+
+          <!-- Email Verification Badge -->
+          @if (currentUser.emailVerified) {
+            <div class="mt-2 flex items-center text-green-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-base mr-1">verified</mat-icon>
+              Correo Verificado
+            </div>
+          } @else {
+            <div class="mt-2 flex items-center text-orange-600 text-sm">
+              <mat-icon class="!w-4 !h-4 !text-base mr-1">warning</mat-icon>
+              Correo No Verificado
+            </div>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Account Information Card -->
+    <mat-card class="!shadow-lg">
+      <mat-card-content class="p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Información de la Cuenta</h3>
+        <mat-divider></mat-divider>
+
+        <mat-list class="!py-0">
+          <mat-list-item class="!h-auto !py-3">
+            <div class="flex items-start w-full">
+              <mat-icon class="text-gray-600 mr-3">person</mat-icon>
+              <div class="flex-1">
+                <div class="text-sm text-gray-600">Nombre para Mostrar</div>
+                <div class="text-base font-medium text-gray-900">
+                  {{ currentUser.displayName || 'No establecido' }}
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item class="!h-auto !py-3">
+            <div class="flex items-start w-full">
+              <mat-icon class="text-gray-600 mr-3">email</mat-icon>
+              <div class="flex-1">
+                <div class="text-sm text-gray-600">Correo Electrónico</div>
+                <div class="text-base font-medium text-gray-900 break-all">
+                  {{ currentUser.email }}
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item class="!h-auto !py-3">
+            <div class="flex items-start w-full">
+              <mat-icon class="text-gray-600 mr-3">fingerprint</mat-icon>
+              <div class="flex-1">
+                <div class="text-sm text-gray-600">ID de Usuario</div>
+                <div class="text-xs font-mono text-gray-700 break-all">
+                  {{ currentUser.uid }}
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item class="!h-auto !py-3">
+            <div class="flex items-start w-full">
+              <mat-icon class="text-gray-600 mr-3">event</mat-icon>
+              <div class="flex-1">
+                <div class="text-sm text-gray-600">Cuenta Creada</div>
+                <div class="text-base font-medium text-gray-900">
+                  {{ formatDate(currentUser.metadata.creationTime) }}
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+
+          <mat-divider></mat-divider>
+
+          <mat-list-item class="!h-auto !py-3">
+            <div class="flex items-start w-full">
+              <mat-icon class="text-gray-600 mr-3">schedule</mat-icon>
+              <div class="flex-1">
+                <div class="text-sm text-gray-600">Último Inicio de Sesión</div>
+                <div class="text-base font-medium text-gray-900">
+                  {{ formatDate(currentUser.metadata.lastSignInTime) }}
+                </div>
+              </div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actions Card -->
+    <mat-card class="!shadow-lg">
+      <mat-card-content class="p-4">
+        <h3 class="text-lg font-semibold text-gray-900 mb-3">Acciones</h3>
+
+        <div class="space-y-2">
+          <!-- Edit Profile Button (placeholder) -->
+          <button
+            mat-raised-button
+            class="w-full !py-3"
+            color="primary"
+            disabled
+          >
+            <mat-icon class="mr-2">edit</mat-icon>
+            Editar Perfil
+          </button>
+
+          <!-- Change Password Button (placeholder) -->
+          <button
+            mat-raised-button
+            class="w-full !py-3"
+            disabled
+          >
+            <mat-icon class="mr-2">lock</mat-icon>
+            Cambiar Contraseña
+          </button>
+
+          <mat-divider class="!my-4"></mat-divider>
+
+          <!-- Logout Button -->
+          <button
+            mat-raised-button
+            class="w-full !py-3"
+            color="warn"
+            (click)="logout()"
+            [disabled]="isLoading()"
+          >
+            <mat-icon class="mr-2">logout</mat-icon>
+            @if (isLoading()) {
+              <span>Cerrando sesión...</span>
+            } @else {
+              <span>Cerrar Sesión</span>
+            }
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  } @else {
+    <!-- Loading State -->
+    <div class="flex items-center justify-center h-64">
+      <div class="text-center">
+        <mat-icon class="!text-6xl !w-16 !h-16 text-gray-400 mb-2">person</mat-icon>
+        <p class="text-gray-600">Cargando perfil...</p>
+      </div>
+    </div>
+  }
+</div>

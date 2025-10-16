@@ -1,0 +1,21 @@
+::ng-deep {
+  .mat-horizontal-content-container {
+    padding: 0;
+  }
+}
+
+.payment-verification-step {
+  padding: 0;
+}
+
+.step-icon {
+  background-color: #1976d2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-status {
+  transition: all 0.3s ease;
+}

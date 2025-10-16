@@ -1,0 +1,68 @@
+<div class="parent-authorization-step p-4">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="step-icon">how_to_reg</mat-icon>
+      <mat-card-title>Autorización de Apoderados</mat-card-title>
+      <mat-card-subtitle>Suba foto del documento de identidad del apoderado</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-4">
+      <div class="info-section mb-6 p-4 bg-purple-50 rounded-lg">
+        <h3 class="font-medium mb-2 flex items-center gap-2">
+          <mat-icon class="text-purple-600">info</mat-icon>
+          Documentos Requeridos
+        </h3>
+        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+          <li>Cédula de identidad del apoderado (ambos lados)</li>
+          <li>Carta de autorización firmada (si aplica)</li>
+          <li>La foto debe ser clara y legible</li>
+          <li>Asegúrese que no haya reflejos en la imagen</li>
+        </ul>
+      </div>
+
+      <app-image-upload-widget
+        [title]="'Documento del Apoderado (Frontal)'"
+        [description]="'Tome una foto del lado frontal del documento'"
+        [icon]="'badge'"
+        [helperText]="'Cédula de identidad u otro documento oficial'"
+        [imagePreview]="documentFrontImage()">
+      </app-image-upload-widget>
+
+      <app-image-upload-widget
+        [title]="'Documento del Apoderado (Reverso)'"
+        [description]="'Tome una foto del lado posterior del documento'"
+        [icon]="'badge'"
+        [helperText]="'Reverso de la cédula de identidad'"
+        [imagePreview]="documentBackImage()">
+      </app-image-upload-widget>
+
+      <app-image-upload-widget
+        [title]="'Carta de Autorización (Opcional)'"
+        [description]="'Si corresponde, suba la carta de autorización'"
+        [icon]="'description'"
+        [helperText]="'Solo si el apoderado no es el padre/madre'"
+        [imagePreview]="authorizationLetterImage()">
+      </app-image-upload-widget>
+
+      <div class="authorization-status mt-4 p-4 border rounded-lg" [class.bg-green-50]="isAuthorized()" [class.border-green-300]="isAuthorized()">
+        <div class="flex items-center gap-2">
+          @if (isAuthorized()) {
+            <mat-icon class="text-green-600">verified_user</mat-icon>
+            <span class="font-medium text-green-700">Documentos Verificados</span>
+          } @else {
+            <mat-icon class="text-orange-600">pending</mat-icon>
+            <span class="font-medium text-orange-700">Pendiente de Revisión</span>
+          }
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="flex justify-end gap-2 p-4">
+      <button mat-button>Atrás</button>
+      <button mat-raised-button color="primary" (click)="onComplete()">
+        Continuar
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -1,0 +1,87 @@
+<div class="materials-delivery-step p-4">
+  <mat-card>
+    <mat-card-header>
+      <mat-icon mat-card-avatar class="step-icon">inventory_2</mat-icon>
+      <mat-card-title>Entrega de Materiales</mat-card-title>
+      <mat-card-subtitle>Registre los materiales entregados al participante</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="mt-4">
+      <div class="info-section mb-6 p-4 bg-amber-50 rounded-lg">
+        <h3 class="font-medium mb-2 flex items-center gap-2">
+          <mat-icon class="text-amber-600">info</mat-icon>
+          Materiales del Camp
+        </h3>
+        <p class="text-sm text-gray-700 mb-2">
+          Verifique que todos los materiales estén completos antes de entregar.
+        </p>
+        <ul class="list-disc list-inside text-sm space-y-1 text-gray-700">
+          <li>Polera oficial del camp</li>
+          <li>Credencial de identificación</li>
+          <li>Kit de materiales didácticos</li>
+          <li>Bolsa del campista</li>
+        </ul>
+      </div>
+
+      <div class="materials-checklist space-y-3 p-4 bg-gray-50 rounded-lg mb-4">
+        <h4 class="font-medium mb-3">Verificación de Materiales</h4>
+
+        <mat-checkbox [checked]="tshirtDelivered()" (change)="tshirtDelivered.set($event.checked)" class="full-width">
+          <span class="flex items-center gap-2">
+            <mat-icon class="text-sm">checkroom</mat-icon>
+            Polera oficial entregada
+          </span>
+        </mat-checkbox>
+
+        <mat-checkbox [checked]="credentialDelivered()" (change)="credentialDelivered.set($event.checked)" class="full-width">
+          <span class="flex items-center gap-2">
+            <mat-icon class="text-sm">badge</mat-icon>
+            Credencial entregada
+          </span>
+        </mat-checkbox>
+
+        <mat-checkbox [checked]="kitDelivered()" (change)="kitDelivered.set($event.checked)" class="full-width">
+          <span class="flex items-center gap-2">
+            <mat-icon class="text-sm">school</mat-icon>
+            Kit didáctico entregado
+          </span>
+        </mat-checkbox>
+
+        <mat-checkbox [checked]="bagDelivered()" (change)="bagDelivered.set($event.checked)" class="full-width">
+          <span class="flex items-center gap-2">
+            <mat-icon class="text-sm">shopping_bag</mat-icon>
+            Bolsa del campista entregada
+          </span>
+        </mat-checkbox>
+      </div>
+
+      <app-image-upload-widget
+        [title]="'Foto de los Materiales Entregados'"
+        [description]="'Tome una foto de los materiales que se están entregando'"
+        [icon]="'photo_camera'"
+        [helperText]="'Esta foto servirá como comprobante de entrega'"
+        [imagePreview]="materialsPhoto()">
+      </app-image-upload-widget>
+
+      <div class="delivery-status mt-4 p-4 border rounded-lg" [class.bg-green-50]="allMaterialsDelivered()" [class.border-green-300]="allMaterialsDelivered()">
+        <div class="flex items-center gap-2">
+          @if (allMaterialsDelivered()) {
+            <mat-icon class="text-green-600">done_all</mat-icon>
+            <span class="font-medium text-green-700">Todos los Materiales Entregados</span>
+          } @else {
+            <mat-icon class="text-orange-600">pending</mat-icon>
+            <span class="font-medium text-orange-700">{{remainingMaterials()}} materiales pendientes</span>
+          }
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions class="flex justify-end gap-2 p-4">
+      <button mat-button>Atrás</button>
+      <button mat-raised-button color="primary" [disabled]="!allMaterialsDelivered()" (click)="onComplete()">
+        Finalizar Check-in
+        <mat-icon>check_circle</mat-icon>
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>

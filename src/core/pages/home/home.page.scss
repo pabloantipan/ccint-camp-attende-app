@@ -1,0 +1,362 @@
+// Mobile-first design for camp attendeees
+.home-container {
+  padding: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  // Welcome Card - Hero Section
+  .welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+
+    mat-card-header {
+      padding-bottom: 0;
+    }
+
+    .welcome-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.5rem;
+      font-weight: 600;
+
+      .welcome-icon {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .camp-countdown {
+      text-align: center;
+      padding: 24px 0;
+
+      .countdown-number {
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 8px;
+      }
+
+      .countdown-label {
+        font-size: 1.125rem;
+        opacity: 0.9;
+        margin-bottom: 16px;
+      }
+
+      .camp-date {
+        font-size: 1rem;
+        opacity: 0.85;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // Status Card
+  .status-card {
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.25rem;
+
+      .status-icon {
+        font-size: 1.75rem;
+        width: 1.75rem;
+        height: 1.75rem;
+
+        &.primary {
+          color: #667eea;
+        }
+
+        &.accent {
+          color: #f59e0b;
+        }
+
+        &.warn {
+          color: #ef4444;
+        }
+
+        &.success {
+          color: #10b981;
+        }
+      }
+    }
+
+    .status-message {
+      margin: 16px 0;
+      font-size: 1rem;
+      color: #4b5563;
+    }
+
+    .action-button {
+      width: 100%;
+      height: 48px;
+      font-size: 1rem;
+      margin-top: 8px;
+
+      mat-icon {
+        margin-right: 8px;
+      }
+    }
+
+    .status-chips {
+      margin-top: 16px;
+      justify-content: center;
+
+      mat-chip {
+        font-size: 1rem;
+        padding: 8px 16px;
+      }
+    }
+  }
+
+  // Announcements Card
+  .announcements-card {
+    background: #fff8dc;
+    border-color: #fbbf24;
+
+    .announcements-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+
+      .announcement-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 8px;
+        background: white;
+        border-radius: 8px;
+
+        .announcement-icon {
+          color: #f59e0b;
+          font-size: 1.25rem;
+          width: 1.25rem;
+          height: 1.25rem;
+          flex-shrink: 0;
+        }
+
+        span {
+          font-size: 0.9375rem;
+          color: #1f2937;
+          line-height: 1.5;
+        }
+      }
+    }
+  }
+
+  // Events Card
+  .events-card {
+    .events-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 8px;
+
+      .event-item {
+        display: flex;
+        gap: 16px;
+        padding: 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          border-color: #667eea;
+        }
+
+        .event-icon-wrapper {
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 56px;
+          height: 56px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border-radius: 12px;
+
+          .event-icon {
+            font-size: 2rem;
+            width: 2rem;
+            height: 2rem;
+            color: white;
+          }
+        }
+
+        .event-details {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          .event-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+          }
+
+          .event-time,
+          .event-location {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.875rem;
+            color: #6b7280;
+
+            .small-icon {
+              font-size: 1rem;
+              width: 1rem;
+              height: 1rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Quick Actions Section
+  .quick-actions-section {
+    margin-top: 8px;
+
+    .section-header {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 16px;
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+
+      .quick-action-card {
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        &:active {
+          transform: translateY(-2px);
+        }
+
+        mat-card-content {
+          padding: 20px;
+        }
+
+        .quick-action-content {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 12px;
+
+          .quick-action-icon {
+            font-size: 3rem;
+            width: 3rem;
+            height: 3rem;
+
+            &.primary {
+              color: #667eea;
+            }
+
+            &.accent {
+              color: #f59e0b;
+            }
+
+            &.secondary {
+              color: #8b5cf6;
+            }
+          }
+
+          .quick-action-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1f2937;
+          }
+
+          .quick-action-description {
+            font-size: 0.875rem;
+            color: #6b7280;
+            line-height: 1.4;
+          }
+        }
+      }
+    }
+  }
+
+  // Common section title styling
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.25rem;
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      color: #667eea;
+    }
+  }
+}
+
+// Tablet breakpoint (768px and up)
+@media (min-width: 768px) {
+  .home-container {
+    padding: 24px;
+    gap: 24px;
+
+    .quick-actions-section {
+      .quick-actions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+    }
+
+    .welcome-card {
+      .welcome-title {
+        font-size: 1.75rem;
+      }
+
+      .camp-countdown {
+        .countdown-number {
+          font-size: 5rem;
+        }
+      }
+    }
+  }
+}
+
+// Desktop breakpoint (1024px and up)
+@media (min-width: 1024px) {
+  .home-container {
+    padding: 32px;
+    gap: 32px;
+
+    .quick-actions-section {
+      .quick-actions-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+    }
+
+    .events-card {
+      .events-list {
+        .event-item {
+          padding: 16px;
+        }
+      }
+    }
+  }
+}

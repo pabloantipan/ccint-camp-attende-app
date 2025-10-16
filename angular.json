@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ccint-camp-attende-app": {
+    "ccint-camp-attendee-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -47,12 +47,24 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
             },
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -61,10 +73,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ccint-camp-attende-app:build:production"
+              "buildTarget": "ccint-camp-attendee-app:build:production"
             },
             "development": {
-              "buildTarget": "ccint-camp-attende-app:build:development"
+              "buildTarget": "ccint-camp-attendee-app:build:development"
             }
           },
           "defaultConfiguration": "development"
