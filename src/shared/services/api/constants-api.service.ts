@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { API_ENDPOINTS } from './api-config';
+import { API_CONFIG, API_ENDPOINTS } from './api-config';
 
 export interface CountryCode {
   code: string;
@@ -43,7 +43,7 @@ export class ConstantsApiService {
     }
 
     // Fetch from server
-    const response = await fetch(`${API_ENDPOINTS.constantsLocations}`);
+    const response = await fetch(`${API_CONFIG.baseUrl}${API_ENDPOINTS.constantsLocations}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch location constants: ${response.statusText}`);

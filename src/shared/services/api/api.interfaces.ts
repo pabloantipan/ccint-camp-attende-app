@@ -22,12 +22,14 @@ export interface RegistrationData {
     lastName: string;
     dateOfBirth: string;
     gender: string;
+    countryCode: string;
     phone: string;
     email: string;
     address: string;
+    country: string;
+    region?: string; // Chilean region (optional, only for Chile)
     city: string;
-    state: string;
-    zipCode: string;
+    state: string; // Chilean commune (state)
   };
   medicalInfo: {
     allergies?: string;

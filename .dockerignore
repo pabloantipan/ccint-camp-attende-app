@@ -1,0 +1,61 @@
+# Angular App .dockerignore
+
+# Git
+.git
+.gitignore
+
+# Documentation
+*.md
+README*
+docs/
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+.editorconfig
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Temporary files
+tmp
+temp
+.tmp
+.cache
+
+# Build artifacts (will be rebuilt in Docker)
+dist/
+.angular/
+.next/
+
+# Dependencies (will be installed in Docker)
+node_modules/
+
+# Environment files (not needed - using build args)
+.env
+.env.*
+
+# Test files
+*.spec.ts
+*.test.ts
+test/
+tests/
+__tests__/
+coverage/
+.nyc_output/
+karma.conf.js
+
+# Angular specific
+e2e/
+.browserslistrc
+
+# Deployment
+Dockerfile
+.dockerignore
+.gcloudignore

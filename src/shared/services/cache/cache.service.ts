@@ -1,15 +1,16 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { IDBPDatabase, openDB } from 'idb';
 import { CacheDB } from './cache.interface';
-import { RegistrationApiService } from '../api/registration-api.service';
-
-
+import { HttpClient } from '@angular/common/http';
+import { environment } from '@environments/environment';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CacheService {
-  private readonly registrationApi = inject(RegistrationApiService);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/api/registrations`;
   private db: IDBPDatabase<CacheDB> | null = null;
   private readonly DB_NAME = 'camp-registry-cache';
   private readonly DB_VERSION = 1;
@@ -247,20 +248,26 @@ export class CacheService {
         // Call the appropriate API method based on action
         switch (item.action) {
           case 'create':
-            await this.registrationApi.createRegistration({
-              id: item.id,
-              personalData: item.data.personalData,
-              medicalInfo: item.data.medicalInfo,
-              registeredAt: item.data.registeredAt,
-            });
+            await firstValueFrom(
+              this.http.post(`${this.apiUrl}`, {
+                id: item.id,
+                personalData: item.data.personalData,
+                medicalInfo: item.data.medicalInfo,
+                registeredAt: item.data.registeredAt,
+              })
+            );
             break;
 
           case 'update':
-            await this.registrationApi.updateRegistration(item.id, item.data);
+            await firstValueFrom(
+              this.http.put(`${this.apiUrl}/${item.id}`, item.data)
+            );
             break;
 
           case 'delete':
-            await this.registrationApi.deleteRegistration(item.id);
+            await firstValueFrom(
+              this.http.delete(`${this.apiUrl}/${item.id}`)
+            );
             break;
 
           default:

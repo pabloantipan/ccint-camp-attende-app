@@ -1,7 +1,7 @@
 export const environment = {
   mode: 'development',
   production: false,
-  apiUrl: 'http://localhost:8080', // Backend API local development
+  apiUrl: 'https://ccint-camp-api-dev-228142504327.southamerica-west1.run.app',
   recaptchaSiteKey: '',
   firebaseConfig: {
     apiKey: 'AIzaSyC1MRS9s5aBzQbnHWjU5RHBf3pp86Q6AQc',

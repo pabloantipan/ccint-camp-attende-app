@@ -1,7 +1,7 @@
 export const environment = {
-  mode: 'none',
+  mode: 'development',
   production: false,
-  apiUrl: 'https://apiUrl',
+  apiUrl: 'http://localhost:8080',
   recaptchaSiteKey: '',
   firebaseConfig: {
     apiKey: "AIzaSyC1MRS9s5aBzQbnHWjU5RHBf3pp86Q6AQc",
