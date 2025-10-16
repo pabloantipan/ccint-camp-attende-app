@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { RegistrationLoaderService } from '@shared/services/registration-loader.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,16 +23,17 @@ import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
   styleUrl: './sign-in.component.scss',
 })
 export class SignInComponent {
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly auth = inject(Auth);
+  private readonly registrationLoader = inject(RegistrationLoaderService);
+
   protected readonly signInForm: FormGroup;
   protected readonly hidePassword = signal(true);
   protected readonly isLoading = signal(false);
   protected readonly errorMessage = signal<string | null>(null);
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private auth: Auth,
-  ) {
+  constructor() {
     this.signInForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -76,6 +78,9 @@ export class SignInComponent {
         console.error('Failed to create session:', sessionError);
         // Continue anyway - client-side auth still works
       }
+
+      // Load and cache registration data
+      await this.registrationLoader.loadAndCacheRegistration();
 
       // Navigate to home after successful login
       await this.router.navigate(['/home']);

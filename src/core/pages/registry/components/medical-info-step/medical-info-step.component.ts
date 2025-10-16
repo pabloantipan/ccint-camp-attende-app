@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { CacheService } from '@shared/services/cache/cache.service';
+import { RegistryService, type RegistrationFormData } from '../../registry.service';
 
 @Component({
   selector: 'app-medical-info-step',
@@ -18,14 +18,12 @@ import { CacheService } from '@shared/services/cache/cache.service';
   styleUrls: ['./medical-info-step.component.scss']
 })
 export class MedicalInfoStepComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly registryService = inject(RegistryService);
+
   protected medicalInfoForm!: FormGroup;
   protected readonly isSubmitting = signal(false);
-
-  constructor(
-    private readonly fb: FormBuilder,
-    private readonly router: Router,
-    private readonly cacheService: CacheService
-  ) { }
 
   ngOnInit(): void {
     // Initialize form with saved data if available
@@ -66,55 +64,52 @@ export class MedicalInfoStepComponent implements OnInit {
       this.saveData(this.medicalInfoForm.value);
 
       // Get all registration data
-      const personalData = JSON.parse(sessionStorage.getItem('registrationPersonalData') || '{}');
-      const medicalInfo = this.medicalInfoForm.value;
-
-      const registrationData = {
-        id: this.generateRegistrationId(),
-        personalData,
-        medicalInfo,
-        registeredAt: new Date().toISOString(),
-        synced: false,
-      };
-
-      console.log('Registration data:', registrationData);
-
-      // Save to cache (IndexedDB) for offline support
-      await this.cacheService.saveRegistration(registrationData.id, registrationData);
-
-      // If online, attempt to sync immediately
-      if (this.cacheService.isOnline()) {
-        console.log('Online: attempting to sync...');
-        await this.cacheService.syncPendingData();
-      } else {
-        console.log('Offline: data saved to cache, will sync when online');
+      const personalDataStr = sessionStorage.getItem('registrationPersonalData');
+      if (!personalDataStr) {
+        throw new Error('Personal data not found. Please complete step 1 first.');
       }
 
-      // Clear session storage
-      sessionStorage.removeItem('registrationPersonalData');
-      sessionStorage.removeItem('registrationMedicalInfo');
+      const personalData = JSON.parse(personalDataStr);
+      const medicalInfo = this.medicalInfoForm.value;
 
-      const statusMessage = this.cacheService.isOnline()
-        ? 'Registration submitted successfully!'
-        : 'Registration saved offline. Will sync when online.';
+      const registrationFormData: RegistrationFormData = {
+        personalData,
+        medicalInfo,
+      };
 
-      alert(statusMessage);
+      console.log('Submitting registration:', registrationFormData);
 
-      // Navigate back to registry root or home
-      this.router.navigate(['/home']);
+      // Submit using RegistryService (handles online/offline automatically)
+      this.registryService.submitRegistration(registrationFormData).subscribe({
+        next: (response) => {
+          console.log('Registration submitted successfully:', response);
+
+          // Clear session storage
+          sessionStorage.removeItem('registrationPersonalData');
+          sessionStorage.removeItem('registrationMedicalInfo');
+
+          // Update cached registration data in sessionStorage for immediate form reload
+          sessionStorage.setItem('registrationPersonalData', JSON.stringify(personalData));
+          sessionStorage.setItem('registrationMedicalInfo', JSON.stringify(medicalInfo));
+
+          alert('Registration submitted successfully!');
+          this.router.navigate(['/home']);
+        },
+        error: (error) => {
+          console.error('Registration error:', error);
+          alert('Failed to submit registration. Data has been saved locally and will sync when online.');
+          // Still navigate away on error since data is cached
+          this.router.navigate(['/home']);
+        },
+        complete: () => {
+          this.isSubmitting.set(false);
+        }
+      });
     } catch (error) {
       console.error('Registration error:', error);
       alert('Failed to submit registration. Please try again.');
-    } finally {
       this.isSubmitting.set(false);
     }
-  }
-
-  /**
-   * Generate unique registration ID
-   */
-  private generateRegistrationId(): string {
-    return `reg_${Date.now()}_${Math.random().toString(36).slice(2, 11)}`;
   }
 
   private getSavedData(): any {

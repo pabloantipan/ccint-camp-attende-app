@@ -1,4 +1,4 @@
-import { Component, signal, OnInit } from '@angular/core';
+import { Component, signal, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Auth, authState, signOut, User } from '@angular/fire/auth';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
+import { RegistrationLoaderService } from '@shared/services/registration-loader.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -22,13 +23,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./user-profile.page.scss']
 })
 export class UserProfilePage implements OnInit {
+  private readonly auth = inject(Auth);
+  private readonly router = inject(Router);
+  private readonly registrationLoader = inject(RegistrationLoaderService);
+
   protected readonly user = signal<User | null>(null);
   protected readonly isLoading = signal(false);
-
-  constructor(
-    private auth: Auth,
-    private router: Router
-  ) {}
 
   ngOnInit(): void {
     // Subscribe to auth state changes
@@ -43,6 +43,9 @@ export class UserProfilePage implements OnInit {
     this.isLoading.set(true);
 
     try {
+      // Clear cached registration data
+      await this.registrationLoader.clearCachedRegistration();
+
       // Sign out from Firebase Auth
       await signOut(this.auth);
 

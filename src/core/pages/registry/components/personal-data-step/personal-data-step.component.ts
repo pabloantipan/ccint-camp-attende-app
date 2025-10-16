@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router } from '@angular/router';
+import { Auth } from '@angular/fire/auth';
 import { ConstantsApiService, type CountryCode, type LocationConstants } from '@shared/services/api/constants-api.service';
 import { map, Observable, startWith } from 'rxjs';
 
@@ -61,6 +62,7 @@ function minAgeValidator(minAge: number): ValidatorFn {
 export class PersonalDataStepComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly auth = inject(Auth);
   private readonly constantsApi = inject(ConstantsApiService);
 
   protected personalDataForm!: FormGroup;
@@ -79,9 +81,7 @@ export class PersonalDataStepComponent implements OnInit {
   protected displayDateOfBirth = signal<string>('');
 
   async ngOnInit(): Promise<void> {
-    // Initialize form first with empty data
-    this.initForm();
-
+    // Load location constants FIRST
     await this.constantsApi.getLocationConstants().then((constants: LocationConstants) => {
       console.log('Location constants received:', constants);
       this.countryCodes.set(constants.countryCodes);
@@ -111,25 +111,34 @@ export class PersonalDataStepComponent implements OnInit {
       };
       this.countryFlags.set(flagMap);
 
-      // Reinitialize cities for the current country
-      this.onCountryChange(this.personalDataForm.get('country')!.value);
-
-      // Initialize communes based on saved region
-      const savedRegion = this.personalDataForm.get('region')?.value;
-      if (savedRegion) {
-        this.onRegionChange(savedRegion);
-      }
-
     }).catch((error) => {
       console.error('Failed to load location constants:', error);
     }).finally(() => {
       console.log('Country codes loaded:', this.countryCodes());
       this.loading.set(false);
     });
+
+    // Initialize form with cached data AFTER location constants are loaded
+    this.initForm();
+
+    // Initialize dependent dropdowns based on form values (saved or default)
+    // This ensures cities and regions are populated correctly
+    const country = this.personalDataForm.get('country')?.value;
+    if (country) {
+      this.onCountryChange(country);
+    }
+
+    const region = this.personalDataForm.get('region')?.value;
+    if (region) {
+      this.onRegionChange(region);
+    }
   }
 
   private initForm(): void {
     const savedData = this.getSavedData();
+
+    // Get user email from Firebase Auth
+    const userEmail = this.auth.currentUser?.email || '';
 
     // Convert saved date (mm/dd/yyyy) to display format (dd/mm/yyyy)
     if (savedData?.dateOfBirth) {
@@ -143,7 +152,7 @@ export class PersonalDataStepComponent implements OnInit {
       gender: [savedData?.gender || '', Validators.required],
       countryCode: [savedData?.countryCode || '+56', Validators.required],
       phone: [savedData?.phone || '', [Validators.required, Validators.pattern(/^\d[\d\s]*$/)]],
-      email: [savedData?.email || '', [Validators.required, emailValidator()]],
+      email: [{ value: userEmail, disabled: true }, [Validators.required, emailValidator()]],
       address: [savedData?.address || '', Validators.required],
       country: [savedData?.country || 'Chile', Validators.required],
       region: [savedData?.region || ''],
@@ -171,9 +180,6 @@ export class PersonalDataStepComponent implements OnInit {
     this.personalDataForm.get('region')!.valueChanges.subscribe(region => {
       this.onRegionChange(region);
     });
-
-    // Initialize cities
-    this.onCountryChange(this.personalDataForm.get('country')!.value);
   }
 
   private _filterCountries(value: string): string[] {
@@ -329,7 +335,9 @@ export class PersonalDataStepComponent implements OnInit {
       return;
     }
 
-    this.saveData(this.personalDataForm.value);
+    // Get raw value to include disabled fields (email)
+    const formData = this.personalDataForm.getRawValue();
+    this.saveData(formData);
     this.router.navigate(['/registry/medical-info']);
   }
 

@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Auth } from '@angular/fire/auth';
 import { Observable, from, switchMap, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '@environments/environment';
@@ -16,12 +17,14 @@ export interface RegistrationFormData {
     lastName: string;
     dateOfBirth: string;
     gender: string;
+    countryCode: string;
     phone: string;
     email: string;
     address: string;
+    country: string;
+    region?: string;
     city: string;
     state: string;
-    zipCode: string;
   };
   medicalInfo: {
     allergies?: string;
@@ -45,15 +48,23 @@ export interface RegistrationFormData {
 })
 export class RegistryService {
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(Auth);
   private readonly cacheService = inject(CacheService);
   private readonly apiUrl = `${environment.apiUrl}/api/registrations`;
 
   /**
    * Submit registration
+   * Uses Firebase Auth UID as registration ID
    * Saves to cache first, then syncs to server when online
    */
   submitRegistration(data: RegistrationFormData): Observable<CreateRegistrationResponse> {
-    const registrationId = this.generateRegistrationId();
+    // Use Firebase Auth UID as registration ID
+    const registrationId = this.auth.currentUser?.uid || '';
+
+    if (!registrationId) {
+      throw new Error('User must be logged in to register');
+    }
+
     const registrationRequest: CreateRegistrationRequest = {
       id: registrationId,
       personalData: data.personalData,
@@ -103,26 +114,6 @@ export class RegistryService {
       id,
       createdAt: new Date().toISOString(),
     };
-  }
-
-  /**
-   * Generate unique registration ID
-   * Format: REG-YYYYMMDD-XXXXX (REG-20250116-A1B2C)
-   */
-  private generateRegistrationId(): string {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    // Generate random 5-character alphanumeric suffix
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let suffix = '';
-    for (let i = 0; i < 5; i++) {
-      suffix += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-
-    return `REG-${year}${month}${day}-${suffix}`;
   }
 
   /**
